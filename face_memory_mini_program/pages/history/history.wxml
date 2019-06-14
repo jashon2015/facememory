@@ -1,0 +1,55 @@
+<!--index.wxml-->
+<view class="page">
+    <view class="page__bd">
+        <view class="weui-panel weui-panel_access">
+            <view class="weui-panel__hd">历史照片</view>
+
+            <view class="weui-panel__bd">
+                <!-- <view class="weui-cell__ft " >
+                    <canvas canvas-id="ringCanvas" bindtouchstart="touchHandler" style="width:100px;height:100px;display:block;position：relative"  ></canvas>
+                </view> -->
+                <view wx:if="{{abbr_url.length>0}}">
+                    <view wx:for="{{abbr_url}}" wx:key="unique">
+                        <!-- <view wx:if="{{pictures.length>0}}">
+                    <view wx:for="{{pictures}}" wx:key="unique"> -->
+
+                        <view class="weui-media-box weui-media-box_appmsg" hover-class="weui-cell_active" bindlongpress="deleteImage" data-index="{{index}}">
+                            <view class="weui-media-box__hd weui-media-box__hd_in-appmsg">
+                                <!-- 对图片实行懒加载 -->
+                                <image class="weui-media-box__thumb" src="{{item}}" data-index="{{index}}" bindtap='previewImage' lazy-load='true' mode='aspectFit' />
+                            </view>
+                            <navigator url="../detailVisual/detailVisual?id={{faceinfo[index].id}}&faceValue={{faceinfo[index].faceValue}}&age={{faceinfo[index].age}}&src={{abbr_url[index]}}">
+                                <view class="weui-media-box__bd weui-media-box__bd_in-appmsg">
+
+                                    <view class="weui-media-box__title" style='font-size:14px'>
+                                        <text decode="{{true}}" space="{{true}}">皮肤状态：{{faceinfo[index].status}} \n识别年龄：{{faceinfo[index].age}}  &nbsp;&nbsp;&nbsp;</text>
+                                        <!-- 健康值：{{faceinfo[index].healthValue}} -->
+                                    </view>
+                                    <view class="weui-media-box__desc" style='font-size:14px'>{{faceinfo[index].createtime}}</view>
+                                </view>
+                            </navigator>
+                            <view class="weui-cell__ft " style="width:60px;height:60px;position:relative;right:-10%;">
+                                <canvas canvas-id="ringCanvas{{index}}" bindtouchstart="touchHandler" style="width:77px;height:77px;display:block;position:relative;top:-20px"></canvas>
+                            </view>
+                        </view>
+                        
+                    </view>
+
+                </view>
+                <view wx:elif="{{prompt!='您还没有拍过照片!'}}">
+                    <view class="prompt ">{{prompt}}</view>
+                </view>
+                <view wx:elif="{{prompt=='您还没有拍过照片!'}}">
+                    <view class="weui-loadmore weui-loadmore_line " style='width:100%'>
+                        <button type="primary" bindtap='toCamera' style='width:100%'>立即拍照</button>
+
+                        <!-- <view class="weui-loadmore__tips weui-loadmore__tips_in-line ">
+                            您还没有拍过照片! 暂无数据</view> -->
+                    </view>
+                </view>
+            </view>
+
+        </view>
+
+    </view>
+</view>

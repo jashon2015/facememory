@@ -6,11 +6,11 @@ import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
+import com.alibaba.fastjson.JSONObject;
 import com.gdp.service.DetectService;
 import com.gdp.util.ParaUtil;
 import com.gdp.util.baidu.Base64Util;
 import com.gdp.util.baidu.FileUtil;
-import com.gdp.util.baidu.GsonUtils;
 import com.gdp.util.baidu.HttpUtil;
 import com.gdp.util.face.CommonOperate;
 import com.gdp.util.face.Response;
@@ -45,7 +45,7 @@ public class DetectServiceImpl implements DetectService {
             map.put("face_field", face_field);
             map.put("image_type", "BASE64");
 
-            String param = GsonUtils.toJson(map);
+            String param = JSONObject.toJSONString(map);
 
             // 线上环境access_token有过期时间， 客户端可自行缓存，过期后重新获取。
             // 有效期为30天.
@@ -74,11 +74,12 @@ public class DetectServiceImpl implements DetectService {
 		// 对图片进行 Base64 编码
         String base64 = Base64Util.encode(imgData);
 		
-		String attributes = "gender,age,smiling,eyestatus,headpose,facequality,"
-				+ "blur,emotion,facequality,beauty,skinstatus";
+		String attributes = "gender,age,smiling,facequality,emotion,facequality,beauty,skinstatus";
+//		blur： 人脸模糊分析结果, eyestatus： 眼睛状态信息,headpose： 人脸姿势分析结果,
 		Response response = null;
 		try {
-			response = commonOperate.detectBase64(base64, 0, attributes);
+			// 设置颜值评分范围在 40~100 之间
+			response = commonOperate.detectBase64(base64, 0, attributes, 40, 100);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

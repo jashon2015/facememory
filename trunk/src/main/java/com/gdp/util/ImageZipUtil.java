@@ -11,11 +11,14 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import net.coobird.thumbnailator.Thumbnails;
 
 public class ImageZipUtil {
 
-	private static Logger logger = Logger.getLogger(ImageZipUtil.class);
+	private static Logger logger = LoggerFactory.getLogger(ImageZipUtil.class);
 	
 	/**
 	 * <p>Title: thumbnailImage</p>
@@ -28,7 +31,7 @@ public class ImageZipUtil {
 	 * @param force		是否强制按照宽高生成缩略图(如果为false，则生成最佳比例缩略图)
 	 * @return
 	 */
-	public static  void thumbnailImage(String imgPath, String outImg, String format, int w, int h, boolean force) {
+	public static void thumbnailImage(String imgPath, String outImg, String format, int w, int h, boolean force) {
 		
 		logger.info("压缩照片： imgPath:" + imgPath);
 		logger.info("压缩照片： outImg:" + outImg);
@@ -73,7 +76,6 @@ public class ImageZipUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-//		return file;
 	}
 	
 /*	
@@ -99,8 +101,44 @@ public class ImageZipUtil {
 	*/
 	public static void main(String[] args) {
 //		File imgFile = new File("C:\\Users\\73028\\Desktop\\201809281751.gif");
-		thumbnailImage("C:\\Users\\73028\\Desktop\\201809281751.gif", "C:\\Users\\73028\\Desktop\\dog.jpg", "JPG",72, 72, false);
-		
+//		thumbnailImage("C:\\Users\\73028\\Desktop\\201809281751.gif", "C:\\Users\\73028\\Desktop\\dog.jpg", "JPG",72, 72, false);
+
+//				String imgPath = "C:\\Users\\73028\\Desktop\\201905090851.jpg";
+//		String outImg = "C:\\Users\\73028\\Desktop\\201905090851_abbr_07.jpg";
+//		System.out.println(new File(imgPath).length());
+//		
+//		googleImageZip(imgPath, outImg);
 	}
+	
+	/**
+	 * 使用谷歌开源工具进行图片压缩
+	 * 
+	 * @param imgPath
+	 * @param outImg
+	 */
+	public static void googleImageZip(String imgPath, String outImg) {
+		/**
+		 * scale是可以指定图片的大小，值在0到1之间，1f就是原图大小，0.5就是原图的一半大小，这里的大小是指图片的长宽。
+		 * 而outputQuality是图片的质量，值也是在0到1，越接近于1质量越好，越接近于0质量越差。
+		 */
+		try {
+			if (new File(imgPath).length() > 1100000) {
+				Thumbnails.of(imgPath) 
+				.scale(0.7f) 
+				.toFile(outImg);
+			} else {
+				Thumbnails.of(imgPath) 
+				.scale(1f) 
+				.toFile(outImg);
+			}
+			
+		} catch (IOException e) {
+			logger.error("{} 图片压缩异常: {}", imgPath, e.getMessage());
+			e.printStackTrace();
+		}
+
+	}
+	
+	
 	
 }
